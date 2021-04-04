@@ -1,3 +1,6 @@
+#ATools
+ATools = Analytical Tools
+
 """ 
 ATools = Analytical Tools
 import ATools as at
