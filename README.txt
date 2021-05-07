@@ -3,8 +3,8 @@ ATools = Analytical Tools
 import ATools as at
 Use info()
 """
-ver = "0.2.2"
-verdate = "April 2021"
+ver = "0.4.0"
+verdate = "May 2021"
 created = "March 2021"
 author = "sweps91"
 
