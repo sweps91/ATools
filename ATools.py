@@ -3,11 +3,11 @@ ATools = Analytical Tools
 import ATools as at
 Use at.info()
 """
-ver = "0.9.2"
-verdate = "September 2022"
+ver = "0.9.6"
+verdate = "February 2023"
 created = "March 2021"
 author = "sweps91"
-Lines = 2_300
+Lines = 2_600
 
 def info():
     """Show list of the functions"""
@@ -107,6 +107,9 @@ def info():
                     "def timedelta(time, days=1_000) = count days from time",
                     "geojson_linestring(path, list_of_coordinates, name_geojson, reverse_lat_lng=False) = Create GeoJSON LineString format",
                     "geojson_multilinestring(path, list_of_lists_with_coordinates, name_geojson, reverse_lat_lng=False) = Create GeoJSON MultiLineString format",
+                    "pandas_help = print main pandas functions",
+                    "pip_help = print main pips commands",
+                    "fstring_help = tips for using fstring",
                     ]
 
     list_of_funcs.sort()
@@ -2297,6 +2300,359 @@ def geojson_multilinestring(path, list_of_lists_with_coordinates, name_geojson, 
             file.write(line)
             file.write("\n")
 
+def pandas_help():
+    """print main pandas functions"""
+
+    lines = """
+    ------------CONTENT---------------------------------------------
+    1) CREATE-SERIES
+    2) CREATE-DATAFRAME
+    3) READ THE DATAFRAME
+    4) ACCESS
+    5) BASIC-ANALYSIS
+    6) OPERATIONS
+    7) CONDITIONAL-SELECTIONS
+    8) OUT-OF-PANDAS
+
+    ------------CREATE-SERIES---------------------------------------------
+    x = pd.Series(data = [10,20,30])
+    #0    10     
+    #1    20     
+    #2    30
+
+    x = pd.Series(data = [10,20,30], index = ["a", "b", "c"])
+    #a    10
+    #b    20
+    #c    30
+
+    x = pd.Series([10,20,30], ["a", "b", "c"])
+    #a    10
+    #b    20
+    #c    30
+
+    x = pd.Series({"a": 10, "b": 20, "c": 30})
+    #a    10
+    #b    20
+    #c    30
+
+    #USA        1
+    #GERMANY    2
+    #USSR       3
+    #JAPAN      4
+
+    #series access
+    x = df["USA"] #by name
+    #1
+
+    x = df[3] #by index
+    #4
+
+    ------------CREATE-DATAFRAME---------------------------------------------
+    1)
+    dictionary = {}
+    df = pd.DataFrame(dictionary)
+
+    2)
+    np.random.seed(101)
+    df = pd.DataFrame(randn(5,4), ["A","B","C","D","E"], ["W","X","Y","Z"])
+    #          W         X         Y         Z
+    #A  2.706850  0.628133  0.907969  0.503826
+    #B  0.651118 -0.319318 -0.848077  0.605965
+    #C -2.018168  0.740122  0.528813 -0.589001
+    #D  0.188695 -0.758872 -0.933237  0.955057
+    #E  0.190794  1.978757  2.605967  0.683509
+
+    ------------READ THE DATAFRAME---------------------------------------------
+    1) Load dataset
+    df = pd.read_excel("path")
+
+    2) Use Polars for faster loading bigger data
+    import Polars as pl
+    df = pl.read_csv("path", columns=['name', 'of', 'columns'])
+    df = df.to_pandas()
+
+    ------------ACCESS---------------------------------------------
+        #          W         X         Y         Z
+    #A  2.706850  0.628133  0.907969  0.503826
+    #B  0.651118 -0.319318 -0.848077  0.605965
+    #C -2.018168  0.740122  0.528813 -0.589001
+    #D  0.188695 -0.758872 -0.933237  0.955057
+    #E  0.190794  1.978757  2.605967  0.683509
+    
+    # SELECTING COLUMNS
+
+    x = df["W"]  
+    #A    2.706850
+    #B    0.651118
+    #C   -2.018168
+    #D    0.188695
+    #E    0.190794
+
+    x = df.W
+    #A    2.706850
+    #B    0.651118
+    #C   -2.018168
+    #D    0.188695
+    #E    0.190794
+
+    x = df[["W", "Z"]]
+    #         W         Z
+    #A  2.706850  0.503826
+    #B  0.651118  0.605965
+    #C -2.018168 -0.589001
+    #D  0.188695  0.955057
+    #E  0.190794  0.683509
+
+    # SELECTING ROWS 
+    x = df.loc["A"]
+    #W      2.706850
+    #X      0.628133
+    #Y      0.907969
+    #Z      0.503826
+    #new    3.614819
+
+    x = df.iloc[0] # BY INDEX
+    #W      2.706850
+    #X      0.628133
+    #Y      0.907969
+    #Z      0.503826
+    #new    3.614819
+
+    #FIND ITEM IN B ROW AND Y COLUMN
+    x = df.loc["B", "Y"] 
+    # -0.8480769834036315
+
+    # FIND AREA
+    x = df.loc[["A", "B"], ["W", "Y"]] 
+    #         W         Y
+    #A  2.706850  0.907969
+    #B  0.651118 -0.848077
+
+    ------------BASIC-ANALYSIS---------------------------------------------
+    1) Return the first few rows of a DataFrame.
+    print(df.head(20)) #default 5
+
+    2) Get a summary of the columns and their data types.
+    print(df.info())
+
+    3) Generate summary statistics for numeric columns
+    Get important values such as the mean, min, max, and std.
+    print(df.describe())
+
+    4) This will return a list with the column names, so you can easily use or modify them.
+    print(df.columns)
+
+    5) Sort a DataFrame by one or more columns.
+    print(df.sort_values(by="column name", ascending=False))
+
+    6) Identify null or missing values in a DataFrame.
+    print(df.isnull())
+
+    7) Create a visualization of the data.
+    import matplotlib.pyplot as plt
+    df.plot(); plt.show()
+
+    8) Shape of DataFrame
+    print(df.shape)
+    # (5, 4) = index 0 = rows; index 1 = columns
+
+    ------------OPERATIONS---------------------------------------------------------
+    1) Set one or more columns as the index of the DataFrame
+    df.set_index("column name")
+
+    2) Apply functions to each element or row in the DataFrame.
+    df.apply()
+
+    3) Create new column
+    df["new"] = df["W"] + df["Y"]
+
+    4) Drop column
+    This method will affect only new variable - if you want to change source data, there is inplace parameter
+    x = df.drop("new", axis=1) #axis = 0 --> by rows; axis = 1 --> by columns
+
+    5) Delete column
+    del df["new"]
+
+    6) Reset index
+    df.reset_index()
+
+    7) Groupby column
+    df = df.groupby(["column"])
+
+    8) Groupby column and count
+    df = df.groupby(["column"])["column"].count()
+
+    9) Create Pivot Table
+    #df = pd.pivot_table(df, index =["column",])
+
+    10) Create Pivot Table and count
+    #df = pd.pivot_table(df, index =["column",], values=["column_count"], aggfunc=np.sum)
+
+    11) Create new row
+    df = df.append({'Name':'Jane', 'Age':25, 'Location':'Madrid'}
+
+    12) Sort by column
+    df.sort_values("column")
+
+    13) Sort by columns
+    df.sort_values(["col1", "col2"], ascending = [False, True])
+
+
+    ------------CONDITIONAL-SELECTIONS---------------------------------------------------------
+    x = df > 0 #booleans
+    #       W      X      Y      Z
+    #A   True   True   True   True
+    #B   True  False  False   True
+    #C  False   True   True  False
+    #D   True  False  False   True
+    #E   True   True   True   True
+
+    x = df[df > 0] #numbers
+    #        W         X         Y         Z
+    #A  2.706850  0.628133  0.907969  0.503826
+    #B  0.651118       NaN       NaN  0.605965
+    #C       NaN  0.740122  0.528813       NaN
+    #D  0.188695       NaN       NaN  0.955057
+    #E  0.190794  1.978757  2.605967  0.683509
+
+    ---
+    x = df["W"] > 0
+    #A     True
+    #B     True
+    #C    False
+    #D     True
+    #E     True
+
+    result = df[df["W"]>0] # C = False  = there will not be C row
+    #        W    
+    #A  2.706850 
+    #B  0.651118 
+    #D  0.188695 
+    #E  0.190794 
+
+    x = result["X"]
+    #A    0.628133
+    #B   -0.319318
+    #D   -0.758872
+    #E    1.978757
+
+    one_step = df[df["W"]>0]["X"]
+    #A    0.628133
+    #B   -0.319318
+    #D   -0.758872
+    #E    1.978757
+    ---
+
+    x = df[df["W"]>0][["X", "Y"]]
+    #          X         Y
+    #A  0.628133  0.907969
+    #B -0.319318 -0.848077
+    #D -0.758872 -0.933237
+    #E  1.978757  2.605967
+
+    # THE SAME RESULT IN MORE LINES:
+    boolser = df["W"]>0
+    result = df[boolser]
+    mycols = ["X", "Y"]
+    x = result[mycols]
+    #          X         Y
+    #A  0.628133  0.907969
+    #B -0.319318 -0.848077
+    #D -0.758872 -0.933237
+    #E  1.978757  2.605967
+
+    x = [(df["W"] > 0) & (df["Y"] > 1)] # & = and; | = or (you can not use normal and/or in df series)
+    #[A    False
+    #B    False
+    #C    False
+    #D    False
+    #E     True
+    #dtype: bool]
+
+    ------------OUT-OF-PANDAS---------------------------------------------------------
+    1) To CSV
+    df.to_csv("path")
+
+    2) To List
+    df["column name"].tolist()
+
+    3) To Dict
+    df.to_dict()
+    
+
+    """
+
+    print(lines)
+
+def pip_help():
+    """print main pips commands"""
+
+    lines = """
+    source: https://www.pythoncentral.io/how-to-use-pip-simple-guide-to-install-update-uninstall-packages/
+
+    -Checked the Details of an Installed Package:
+    pip show <package-name>
+
+    -Listing All Installed Packages:
+    pip list
+
+    -You can alter the output format of the command to only output up-to-date packages:
+    pip freeze
+    -------------------------------
+    -Installing a Package:
+    pip install <package-name>
+
+    -install multiple packages:
+    pip install <package_name_1> <package_name_2> <package_name_3> ...
+
+    -install a specific version of a package:
+    pip install <package-name>==<version>
+
+    -install a package from a local directory:
+    pip install path/to/dir
+
+    -install packages from .whl and .zip files as long as they contain a setup.py file:
+    pip install path/to/zipfile.zip
+
+    -install a package from the Git repository:
+    pip install git+<repository-url>
+    -------------------------------
+    -Updating a Package:
+    pip install --upgrade <package-name>
+    #or
+    pip install -U <package-name>
+    -------------------------------
+    -Uninstalling a Package:
+    pip uninstall <package-name>
+    #or
+    pip uninstall <package-name1> <package-name2> <package-name3> ...
+
+    """
+
+    print(lines)
+
+def fstring_help():
+    """tips for using f-string"""
+
+    lines = """
+    NUMBERS:
+    num = 999999999
+    print(f"{num:_}")
+    --> 999_999_999
+
+    JUSTIFY:
+    word = "Hello"
+    print(f"{word:-<20}")
+    --> Hello---------------
+
+    print(f"{word:->20}")
+    --> ---------------Hello
+
+    print(f"{word:-^20}")
+    --> -------Hello--------
+
+    """
+    print(lines)
 
 
 
